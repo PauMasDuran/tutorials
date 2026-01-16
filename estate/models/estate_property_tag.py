@@ -1,0 +1,7 @@
+from odoo import fields, models # type: ignore
+
+class estatePropertyTag (models.Model):
+    _name = "estate.property.tag"
+    _description = "Tags about the properties"
+
+    name = fields.Char(required=True)

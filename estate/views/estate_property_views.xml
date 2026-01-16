@@ -16,58 +16,80 @@
 
 <!-- Form view-->
 
-  <record id="estate_form" model="ir.ui.view">
-      <field name="name">Estate Form</field>
-      <field name="model">estate.property</field>
-      <field name="arch" type="xml">
-          <form string="Estate Property">
-              <sheet>
+    <record id="estate_form" model="ir.ui.view">
+        <field name="name">Estate Form</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <form string="Estate Property">
+                <sheet>
 
-                  <!-- Title -->
-                  <div class="oe_title">
-                      <h1>
-                          <field name="name" placeholder="Property name"/>
-                      </h1>
-                  </div>
+                    <!-- Title -->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Property name"/>
+                        </h1>
+                        <field name="tag_id" widget="many2many_tags"/>
+                    </div>
+                    <!-- Main info -->
+                    <group>
+                        <div class="row">
+                            <div class="col-3">
+                                
+                                <group>
+                                    <field name="property_type_id"/>
+                                    <field name="postcode"/>
+                                    <field name="date_availability"/>
+                                </group>
+                            </div>
+                            <div class="col-3">
+                                <group>
+                                    <field name="expected_price"/>
+                                    <field name="selling_price" readonly="1" />
+                                </group>
+                            </div>
+                        </div>   
+                    </group>
 
-                  <!-- Main info -->
-                  <group>
-                      <group class="oe_inline">
-                          <field name="postcode" />
-                          <field name="date_availability" />
-                      </group>
+                    <notebook>
 
-                      <group class="oe_inline">
-                          <field name="expected_price"/>
-                          <field name="selling_price" readonly="1"/>
-                      </group>
-                  </group>
+                        <!-- Description tab -->
+                        <page string="Description">
+                                
+                            <group>
+                                <field name="description" placeholder="Describe the property..."/>
+                                <field name="bedrooms"/>
+                                <field name="living_area"/>
+                                <field name="facades"/>
+                                <field name="garage"/>
+                                <field name="garden"/>
+                                <field name="garden_area"/>
+                                <field name="garden_orientation"/>
+                                <field name="state"/>
+                            </group>
+                                
+                        </page>
+                        <page string="Offers">
+                            <field name="offer_ids">
+                                <list editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="price"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Other Info">
+                            <group>
+                                <field name="salesman_id"/>
+                                <field name="buyer_id"/>
+                            </group>
+                        </page>
+                    </notebook>
 
-                  <notebook>
+                </sheet>
+            </form>
 
-                      <!-- Description tab -->
-                      <page string="Description">
-                              
-                          <group>
-                              <field name="description" placeholder="Describe the property..."/>
-                              <field name="bedrooms"/>
-                              <field name="living_area"/>
-                              <field name="facades"/>
-                              <field name="garage"/>
-                              <field name="garden"/>
-                              <field name="garden_area"/>
-                              <field name="garden_orientation"/>
-                              <field name="state"/>
-                          </group>
-                              
-                      </page>
-                  </notebook>
-
-              </sheet>
-          </form>
-
-      </field>
-  </record>
+        </field>
+    </record>
 
 <!--List view-->
 
