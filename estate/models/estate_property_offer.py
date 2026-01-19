@@ -36,3 +36,16 @@ class estatePropertyOffer (models.Model):
                 record.validity = (record.date_deadline - base_date).days
             else:
                 record.validity = 7
+    
+    # Button Methods
+
+    def confirm_status(self):
+        for record in self:
+            record.status = "accepted"
+            record.property_id.selling_price = record.price
+            record.property_id.buyer_id = record.partner_id
+            #Make recordset - record per rebutjar to tes les altres offers.
+
+    def refused_status(self):
+        for record in self:
+            record.status = "refused"

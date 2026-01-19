@@ -1,5 +1,6 @@
 
 from odoo import fields, models, api # type: ignore
+from odoo.exceptions import UserError
 
 class estateProperty(models.Model):
     _name = "estate.property"
@@ -11,7 +12,8 @@ class estateProperty(models.Model):
     postcode = fields.Char()
     date_availability = fields.Date(string= "Available From", copy=False, default=lambda self: fields.Date.add(fields.Date.context_today(self),months=3))
     expected_price = fields.Float(required=True)
-    selling_price = fields.Float(copy=False, readonly=True, compute="_best_offer")
+    selling_price = fields.Float(copy=False, readonly=True)
+    best_offer = fields.Float(copy=False, readonly=True, compute="_best_offer")
     bedrooms = fields.Integer(default="2")
     living_area = fields.Integer()
     facades = fields.Integer()
@@ -46,9 +48,38 @@ class estateProperty(models.Model):
 
     @api.depends("offer_ids.price")
     def _best_offer(self):
-        
         for record in self:
             prices = record.offer_ids.mapped("price")
-            record.selling_price = max(prices) if prices else 0
+            record.best_offer = max(prices) if prices else 0
 
+    #OnChange
+
+    @api.onchange("garden")
+    def _on_garden_change(self):
+        if self.garden:
+            self.garden_area = 10
+            self.garden_orientation = "north"
+        else:
+            self.garden_area = False
+            self.garden_orientation = False
+
+
+    #button methods
+
+    def sell_property(self):
+        for record in self:
+            if record.state == "cancelled":
+                raise UserError("You can't sell an already cancelled property")
+            else:
+                record.state = "sold"
+        
+        return True
     
+    def cancel_property(self):
+        for record in self:
+            if record.state == "sold":
+                raise UserError("You can't cancel an already sold property")
+            else:
+                record.state = "cancelled"
+        
+        return True
