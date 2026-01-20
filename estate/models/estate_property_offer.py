@@ -40,12 +40,25 @@ class estatePropertyOffer (models.Model):
     # Button Methods
 
     def confirm_status(self):
+        self.ensure_one()
+        
         for record in self:
             record.status = "accepted"
             record.property_id.selling_price = record.price
             record.property_id.buyer_id = record.partner_id
-            #Make recordset - record per rebutjar to tes les altres offers.
+        print(self)
+
+        other_offers = self.property_id.offer_ids - self
+        other_offers.write({'status': 'refused'})
+
 
     def refused_status(self):
         for record in self:
             record.status = "refused"
+
+    #sql constrains 
+    
+    _positive_price = models.Constraint(
+        'CHECK(price >= 0)',
+        'The price offer of a property can not be negative') 
+    

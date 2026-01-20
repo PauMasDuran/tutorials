@@ -1,6 +1,7 @@
 
 from odoo import fields, models, api # type: ignore
 from odoo.exceptions import UserError
+from odoo.tools import float_utils
 
 class estateProperty(models.Model):
     _name = "estate.property"
@@ -83,3 +84,25 @@ class estateProperty(models.Model):
                 record.state = "cancelled"
         
         return True
+    
+    #sql constrains
+
+    _positive_expected_price = models.Constraint(
+        'CHECK(expected_price >= 0 AND selling_price >= 0)',
+        'The price of a property can not be negative'
+        )
+    
+    #python constrains
+
+    @api.constrains("selling_price","expected_price")
+    def _check_selling_price(self):
+        for record in self:
+            if float_utils.float_is_zero(record.selling_price, precision_digits=2):
+                return
+            if float_utils.float_compare(
+            record.selling_price,
+            record.expected_price * 0.9,
+            precision_digits=2
+            ) < 0:
+                raise UserError("Selling price cannot be below 90 percent of the expected price.")
+    
