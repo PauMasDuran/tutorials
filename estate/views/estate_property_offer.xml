@@ -20,4 +20,22 @@
       </field>
 </record>
 
+<!--List view-->
+
+<record id="offer_list_view" model="ir.ui.view">
+    <field name="name">Offer List</field>
+    <field name="model">estate.property.offer</field>
+    <field name="arch" type="xml">
+        <list>
+            <field name="partner_id"/>
+            <field name="price"/>
+            <field name="validity" />
+            <field name="date_deadline"/>
+            <button name="confirm_status" type="object" title="Accepted" icon="fa-check"/>
+            <button name="refused_status" type="object" title="Refused" icon="fa-times"/>
+            <field name="status"/>
+        </list>
+    </field>
+</record>
+
 </odoo>

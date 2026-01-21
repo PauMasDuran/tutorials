@@ -3,6 +3,7 @@ from odoo import fields, models, api # type: ignore
 class estatePropertyOffer (models.Model):
     _name = "estate.property.offer"
     _description = "Tags about the properties"
+    _order = "price desc"
 
     price = fields.Float()
     status = fields.Selection(copy = False, selection= [("accepted","Accepted"),("refused","Refused")])
@@ -46,7 +47,6 @@ class estatePropertyOffer (models.Model):
             record.status = "accepted"
             record.property_id.selling_price = record.price
             record.property_id.buyer_id = record.partner_id
-        print(self)
 
         other_offers = self.property_id.offer_ids - self
         other_offers.write({'status': 'refused'})
