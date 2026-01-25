@@ -19,15 +19,25 @@
       <field name="model">estate.property.type</field>
       <field name="arch" type="xml">
           <form string="Estate Property Type">
-              <sheet>
-                  <!-- Title -->
-                  <group>
-                      <h1>
-                          <field name="name" placeholder="Property Type"/>
-                      </h1>
-                      
-                  </group>
-              
+            <header>
+              <button type="action"
+                name="%(property_offer_action)d"
+                class="oe_stat_button"
+                icon="fa-tags"
+                title="Offers">
+                <field name="offer_count" widget="statinfo"/>
+              </button>
+            </header>
+            
+            <sheet>
+              <!-- Title -->
+              <group>
+                  <h1>
+                      <field name="name" placeholder="Property Type"/>
+                  </h1>
+                  
+              </group>
+            
               <notebook>
                 <page string="Properties">
                   <field name="property_id">
@@ -53,6 +63,7 @@
         <list>
           <field name="sequence" widget="handle"/>
           <field name="name"/>  
+          <field name="offer_count"/>
         </list>
     </field>
 </record>

@@ -106,4 +106,21 @@ class estateProperty(models.Model):
             precision_digits=2
             ) < 0:
                 raise UserError("Selling price cannot be below 90 percent of the expected price.")
+            
+    #inheritance
+
+    @api.ondelete(at_uninstall=False)
+    def _check_property_deletion(self):
+        for record in self:
+            if record.state not in ('new','cancelled'):
+                raise UserError("You can't delete this property. (change state to new or cancelled)")
     
+    #Other methods
+
+    def offer_created(self):
+        for record in self:
+            record.state = 'offer Received'
+    
+    def get_expected_price(self):
+        for record in self:
+            return record.expected_price
